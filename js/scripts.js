@@ -5,10 +5,10 @@ var Game = {
     var game = Object.create(Game);
     game.initialize();
     return game
-  }
+  },
 
   initialize: function() {
-    this.players: []
+    this.players = [];
   },
 
   start: function() {
@@ -17,24 +17,31 @@ var Game = {
   },
 
   createPlayers: function() {
+    game = this;
     this.marks.forEach(function(mark) {
       var player = Player.create(mark);
       player.game = this;
-      this.players.push(player);
+      game.players.push(player);
     });
   },
 
   createBoard: function() {
-    var board = Board.create();
-    board.game = this;
+    this.board = Board.create();
+    this.board.game = this;
   },
 
   currentPlayer: function() {
-    this.players[0];
+    return this.players[0];
   },
 
   hasWinner: function() {
     // some code to determine the winner
+    return false;
+  },
+
+  nextTurn: function() {
+    var nextPlayer = this.players.pop();
+    this.players.unshift(nextPlayer);
   }
 }
 
@@ -64,6 +71,7 @@ var Board = {
   initialize: function() {
     this.spaces = [];
     this.createSpaces();
+    this.assignWinningGroups()
   },
 
   createSpaces: function() {
@@ -74,6 +82,12 @@ var Board = {
         this.spaces.push(space);
       }
     }
+  },
+
+  assignWinningGroups: function() {
+    this.column0 =
+    this.column1 =
+    this.column2 = 
   }
 }
 
@@ -87,17 +101,20 @@ var Space = {
   initialize: function(x, y) {
     this.x_coord = x;
     this.y_coord = y;
+    this.markedBy = null;
   }
 }
 
 $(function() {
   var newGame = Game.create();
   newGame.start();
-  newGame.board.spaces.forEach(function(space) {
-    // render some html for the space
-    // bind click event for marking this space
+
+  $(".square").each(function(index) {
+    console.log("looping over square #" + String(index));
     $(this).on('click', function() {
-      space.markBy(newGame.currentPlayer());
+      space = newGame.board.spaces[index];
+      newGame.currentPlayer().markSpace(space);
+      $(this).children(".content").text(space.markedBy.mark);
       if (newGame.hasWinner()) {
         alert("Winner!")
       } else {

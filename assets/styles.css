@@ -1,0 +1,17 @@
+.container {
+  margin: 20px 5%;
+}
+
+.square {
+  float: left;
+  width: 30%;
+  padding-bottom: 30%;
+  border: 3px solid black;
+}
+
+.content {
+  position:absolute;
+  height:80%; /* = 100% - 2*10% padding */
+  width:90%; /* = 100% - 2*5% padding */
+  padding: 10% 5%;
+}
